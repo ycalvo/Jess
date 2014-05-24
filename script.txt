@@ -1,0 +1,48 @@
+--CREACIÓN DE TABLA
+CREATE TABLE app_for_leave
+(
+  sno integer NOT NULL,
+  eid integer,
+  ename varchar(20),
+  sd date,
+  ed date,
+  sid integer,
+  status boolean DEFAULT false,
+  CONSTRAINT pk_snoa PRIMARY KEY (sno)
+)
+;
+--INSERCIÓN SIMPLE
+INSERT INTO app_for_leave(sno, eid, sd, ed, sid, status)
+ VALUES(1,101,'2013-04-04','2013-04-04',2,'f' );
+
+--MUESTRA EL CONTENIDO DE LA TABLA
+ select * from app_for_leave;
+ 
+--FUNCIÓN DE INSERTAR
+ CREATE FUNCTION MyInsert(_sno integer, _eid integer, _sd date, _ed date, _sid integer, _status boolean)
+  RETURNS void AS
+  $BODY$
+      BEGIN
+        INSERT INTO app_for_leave(sno, eid, sd, ed, sid, status)
+        VALUES(_sno, _eid, _sd, _ed, _sid, _status);
+      END;
+  $BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100;
+  
+--LLAMA A LA FUNCIÓN
+ select * from MyInsert(3,102,'2013-04-04','2013-04-04',2,'f' );
+
+ CREATE FUNCTION Mydelete(_sno integer)
+  RETURNS void AS
+  $BODY$
+      BEGIN
+        delete from app_for_leave 
+        WHERE sno =  _sno;
+      END;
+  $BODY$
+  LANGUAGE 'plpgsql' VOLATILE
+  COST 100;
+
+ 
+ select * from Mydelete(3);
